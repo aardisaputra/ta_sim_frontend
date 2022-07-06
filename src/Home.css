@@ -1,3 +1,8 @@
+.fill {
+  height: 50vh;
+  padding-top: 30vh;
+}
+
 .App {
   text-align: center;
 }

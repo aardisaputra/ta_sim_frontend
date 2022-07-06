@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Home from "./Home";
+import Model from "./models/Model";
+import reportWebVitals from "./reportWebVitals";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
 function App() {
+  const [ticker, setTicker] = useState("Ticker");
+  const [model, setModel] = useState("Model");
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={
+            <Home
+              setTicker={setTicker}
+              setModel={setModel}
+              model={model}
+              ticker={ticker}
+            />
+          }
+        ></Route>
+        <Route
+          exact
+          path="/model"
+          element={<Model model={model} ticker={ticker} setModel={setModel} />}
+        ></Route>
+      </Routes>
+    </Router>
   );
 }
 
