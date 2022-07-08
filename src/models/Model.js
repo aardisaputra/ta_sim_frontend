@@ -12,6 +12,7 @@ import {
   Col,
   Button,
 } from "react-bootstrap";
+import "./Model.css";
 import { Line } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Chart } from "chart.js";
@@ -20,7 +21,6 @@ import annotationPlugin from "chartjs-plugin-annotation";
 import axios from "axios";
 
 import MacdOptions from "./MacdOptions";
-
 import { getQuote, getMacdActions } from "../helper/HelperFuncs";
 
 //async function to get live stock quote data
@@ -63,7 +63,7 @@ function Model({ setModel, model, ticker }) {
     end,
     agg
   ) => {
-    await getQuote(
+    getQuote(
       ticker,
       start,
       end,
@@ -73,7 +73,7 @@ function Model({ setModel, model, ticker }) {
       setQuote,
       setUnixTimes
     );
-    await getMacdActions(
+    getMacdActions(
       slow,
       fast,
       signal,
@@ -99,6 +99,14 @@ function Model({ setModel, model, ticker }) {
         annotations: triggers,
       },
     },
+    scales: {
+      x: {
+        ticks: {
+          display: false,
+        },
+      },
+    },
+    responsive: true,
   };
 
   return (
@@ -139,8 +147,9 @@ function Model({ setModel, model, ticker }) {
           </Navbar>
         </Container>
       </Navbar>
-      update: i'm talking w jj again...
-      <Line data={quote} options={testOptions} />
+      <div className="graphArea">
+        <Line data={quote} options={testOptions} />
+      </div>
     </div>
   );
 }
