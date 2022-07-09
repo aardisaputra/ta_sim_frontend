@@ -56,7 +56,8 @@ const getMacdActions = (
   agg,
   setTriggers,
   triggers,
-  unixTimes
+  unixTimes,
+  setReturns
 ) => {
   axios
     .post(baseURL + "/macdModel", {
@@ -102,8 +103,73 @@ const getMacdActions = (
         setTriggers({
           ...triggers,
         });
+        setReturns(response.data.returns);
       });
     });
 };
 
-export { getQuote, getMacdActions };
+const getRsiActions = (
+  win,
+  interval,
+  shares,
+  price,
+  cash,
+  usePeriod,
+  period,
+  start,
+  end,
+  agg,
+  setTriggers,
+  triggers,
+  unixTimes,
+  setReturns
+) => {
+  axios
+    .post(baseURL + "/rsiModel", {
+      window: win,
+      interval: interval,
+      shares: shares,
+      starting_price: price,
+      cash: cash,
+      period: usePeriod ? undefined : period,
+      start_date: start,
+      end_date: end,
+      agg: agg,
+    })
+    .then((response) => {
+      const scaler = (key) => {
+        return (
+          ((parseInt(key) - unixTimes[0] / 1000) /
+            (unixTimes[1] - unixTimes[0])) *
+          1000
+        );
+      };
+      var trigs = response.data.triggers;
+      const keys = Object.keys(trigs);
+      console.log(trigs);
+      keys.forEach((key, index) => {
+        console.log(
+          ((parseInt(key) - unixTimes[0] / 1000) /
+            (unixTimes[1] - unixTimes[0])) *
+            1000
+        );
+        let tempPt = {
+          type: "point",
+          xValue: scaler(key),
+          yValue: trigs[key][0],
+          radius: 5,
+          backgroundColor:
+            trigs[key][1] === "buy"
+              ? "rgba(99, 255, 132, 0.25)"
+              : "rgba(255, 99, 132, 0.25)",
+        };
+        triggers[`point ${index}`] = tempPt;
+        setTriggers({
+          ...triggers,
+        });
+        setReturns(response.data.returns);
+      });
+    });
+};
+
+export { getQuote, getMacdActions, getRsiActions };

@@ -21,16 +21,8 @@ import annotationPlugin from "chartjs-plugin-annotation";
 import axios from "axios";
 
 import MacdOptions from "./MacdOptions";
-import { getQuote, getMacdActions } from "../helper/HelperFuncs";
-
-//async function to get live stock quote data
-//labels (x-axis) time
-//data (y-axis) closing price
-
-//chartjs plugin annotation
-//async function get buying and selling points
-//determine x and y value
-//annotate red and green
+import RsiOptions from "./RsiOptions";
+import { getQuote, getMacdActions, getRsiActions } from "../helper/HelperFuncs";
 
 Chart.register(annotationPlugin);
 const baseURL = "http://127.0.0.1:5000";
@@ -43,13 +35,29 @@ function Model({ setModel, model, ticker }) {
   const [triggers, setTriggers] = useState({});
   const [unixTimes, setUnixTimes] = useState([]);
 
-  const [show, setShow] = useState(false);
+  const [showMacd, setMacdShow] = useState(false);
+  const [showRsi, setShowRsi] = useState(false);
   const [options, setOptions] = useState([]);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const [returns, setReturns] = useState(0);
 
-  const handleMacdRun = async (
+  const handleClose = () => {
+    if (model == "MACD") {
+      setMacdShow(false);
+    } else if (model == "RSI") {
+      setShowRsi(false);
+    }
+  };
+
+  const handleShow = () => {
+    if (model == "MACD") {
+      setMacdShow(true);
+    } else if (model == "RSI") {
+      setShowRsi(true);
+    }
+  };
+
+  const handleMacdRun = (
     slow,
     fast,
     signal,
@@ -63,16 +71,6 @@ function Model({ setModel, model, ticker }) {
     end,
     agg
   ) => {
-    getQuote(
-      ticker,
-      start,
-      end,
-      usePeriod,
-      period,
-      interval,
-      setQuote,
-      setUnixTimes
-    );
     getMacdActions(
       slow,
       fast,
@@ -88,7 +86,58 @@ function Model({ setModel, model, ticker }) {
       agg,
       setTriggers,
       triggers,
-      unixTimes
+      unixTimes,
+      setReturns
+    );
+    getQuote(
+      ticker,
+      start,
+      end,
+      usePeriod,
+      period,
+      interval,
+      setQuote,
+      setUnixTimes
+    );
+  };
+
+  const handleRsiRun = (
+    win,
+    interval,
+    shares,
+    price,
+    cash,
+    usePeriod,
+    period,
+    start,
+    end,
+    agg
+  ) => {
+    getRsiActions(
+      win,
+      interval,
+      shares,
+      price,
+      cash,
+      usePeriod,
+      period,
+      start,
+      end,
+      agg,
+      setTriggers,
+      triggers,
+      unixTimes,
+      setReturns
+    );
+    getQuote(
+      ticker,
+      start,
+      end,
+      usePeriod,
+      period,
+      interval,
+      setQuote,
+      setUnixTimes
     );
   };
 
@@ -125,18 +174,25 @@ function Model({ setModel, model, ticker }) {
                 </Button>
                 <MacdOptions
                   handleClose={handleClose}
-                  show={show}
+                  show={showMacd}
                   options={options}
                   setOptions={setOptions}
                   handleMacdRun={handleMacdRun}
+                />
+                <RsiOptions
+                  handleClose={handleClose}
+                  show={showRsi}
+                  options={options}
+                  setOptions={setOptions}
+                  handleRsiRun={handleRsiRun}
                 />
 
                 <Dropdown.Menu>
                   <Dropdown.Item onClick={() => setModel("MACD")}>
                     MACD
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setModel("JOJO")}>
-                    IHATE
+                  <Dropdown.Item onClick={() => setModel("RSI")}>
+                    RSI
                   </Dropdown.Item>
                   <Dropdown.Item onClick={() => setModel("COCK")}>
                     BRADLEYLOVES
@@ -150,6 +206,7 @@ function Model({ setModel, model, ticker }) {
       <div className="graphArea">
         <Line data={quote} options={testOptions} />
       </div>
+      <div className="returnsText">Total Predicted Returns: ${returns}</div>
     </div>
   );
 }

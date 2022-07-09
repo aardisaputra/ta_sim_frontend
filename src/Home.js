@@ -40,8 +40,8 @@ function Home({ setTicker, setModel, model, ticker }) {
               <Dropdown.Item onClick={() => setTicker("AAPL")}>
                 AAPL
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => setTicker("NOTJJ")}>
-                LOVE
+              <Dropdown.Item onClick={() => setTicker("TWTR")}>
+                TWTR
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -54,9 +54,7 @@ function Home({ setTicker, setModel, model, ticker }) {
               <Dropdown.Item onClick={() => setModel("MACD")}>
                 MACD
               </Dropdown.Item>
-              <Dropdown.Item onClick={() => setModel("JOJO")}>
-                IHATE
-              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setModel("RSI")}>RSI</Dropdown.Item>
               <Dropdown.Item onClick={() => setModel("COCK")}>
                 BRADLEYLOVES
               </Dropdown.Item>
