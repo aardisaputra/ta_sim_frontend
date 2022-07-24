@@ -55,9 +55,6 @@ function Home({ setTicker, setModel, model, ticker }) {
                 MACD
               </Dropdown.Item>
               <Dropdown.Item onClick={() => setModel("RSI")}>RSI</Dropdown.Item>
-              <Dropdown.Item onClick={() => setModel("COCK")}>
-                BRADLEYLOVES
-              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
 

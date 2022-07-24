@@ -194,9 +194,6 @@ function Model({ setModel, model, ticker }) {
                   <Dropdown.Item onClick={() => setModel("RSI")}>
                     RSI
                   </Dropdown.Item>
-                  <Dropdown.Item onClick={() => setModel("COCK")}>
-                    BRADLEYLOVES
-                  </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav>
