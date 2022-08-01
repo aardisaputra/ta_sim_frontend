@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://lotusfinanceapi.org/api";
+const baseURL = "https://lotusfinanceapi.org/api";
 
 const getQuote = (
   ticker,

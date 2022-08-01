@@ -25,7 +25,7 @@ import RsiOptions from "./RsiOptions";
 import { getQuote, getMacdActions, getRsiActions } from "../helper/HelperFuncs";
 
 Chart.register(annotationPlugin);
-const baseURL = "http://lotusfinanceapi.org/api";
+const baseURL = "https://lotusfinanceapi.org/api";
 
 function Model({ setModel, model, ticker }) {
   const [quote, setQuote] = useState({
